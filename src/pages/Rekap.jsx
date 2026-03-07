@@ -25,7 +25,7 @@ export default function Rekap() {
     const fetchData = async (userId) => {
         try {
             // Ambil Data Rekap & Grafik
-            const resRekap = await axios.get(`http://localhost:5000/api/tracker/rekap/${userId}`);
+            const resRekap = await axios.get(`https://ramadhan-tracker-api-production.up.railway.app/`);
             setRekap(resRekap.data);
             
             // Format data untuk grafik (mengambil dari data historis di backend)
@@ -37,7 +37,7 @@ export default function Rekap() {
             setChartData(formattedChart);
 
             // Ambil Data Leaderboard
-            const resLeader = await axios.get(`http://localhost:5000/api/tracker/leaderboard`);
+            const resLeader = await axios.get(`https://ramadhan-tracker-api-production.up.railway.app/`);
             setLeaderboard(resLeader.data);
         } catch (error) {
             console.error("Gagal memuat data pro", error);

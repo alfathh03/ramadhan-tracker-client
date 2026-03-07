@@ -37,7 +37,7 @@ export default function Dashboard() {
 
     const fetchTrackerData = async (userId, tanggal) => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/tracker/${userId}/${tanggal}`);
+            const response = await axios.get(`https://ramadhan-tracker-api-production.up.railway.app/`);
             if (response.data.data) {
                 const dbData = response.data.data;
                 setTracker({
@@ -73,7 +73,7 @@ export default function Dashboard() {
                 ...tracker
             };
             
-            const response = await axios.post('http://localhost:5000/api/tracker', payload);
+            const response = await axios.post('https://ramadhan-tracker-api-production.up.railway.app/', payload);
             alert('✅ ' + response.data.message);
         } catch (error) {
             alert('❌ Gagal menyimpan data');
