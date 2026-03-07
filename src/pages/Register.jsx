@@ -13,7 +13,7 @@ export default function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('https://ramadhan-tracker-api-production.up.railway.app/', formData);
+            const response = await axios.post('https://ramadhan-tracker-api-production.up.railway.app/api/auth/register', formData);
             alert(response.data.message);
             navigate('/login');
         } catch (error) {

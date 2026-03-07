@@ -15,7 +15,7 @@ export default function Login() {
         e.preventDefault();
         try {
             // API YANG DITUJU ADALAH /login
-            const response = await axios.post('https://ramadhan-tracker-api-production.up.railway.app/', formData);
+            const response = await axios.post('https://ramadhan-tracker-api-production.up.railway.app/api/auth/login', formData);
             localStorage.setItem('user', JSON.stringify(response.data.user));
             navigate('/dashboard');
         } catch (error) {
