@@ -3,8 +3,9 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 
 export default function Login() {
-    // HANYA BUTUH EMAIL DAN PASSWORD (Tidak ada nama)
+    // State hanya butuh email dan password untuk login
     const [formData, setFormData] = useState({ email: '', password: '' });
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -13,13 +14,23 @@ export default function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
-            // API YANG DITUJU ADALAH /login
+            // URL API menuju Railway
             const response = await axios.post('https://ramadhan-tracker-api-production.up.railway.app/api/auth/login', formData);
+            
+            // Simpan data user (id & nama_lengkap) ke localStorage
             localStorage.setItem('user', JSON.stringify(response.data.user));
-            navigate('/dashboard');
+            
+            alert(response.data.message || 'Login Berhasil! 🚀');
+            
+            // Arahkan ke halaman Dashboard setelah sukses
+            navigate('/dashboard'); 
         } catch (error) {
-            alert(error.response?.data?.message || 'Terjadi kesalahan saat login');
+            // Menampilkan pesan error spesifik dari Back-End
+            alert(error.response?.data?.message || 'Email atau Password salah!');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -35,28 +46,44 @@ export default function Login() {
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                         <input 
-                            type="email" name="email" onChange={handleChange} required 
-                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
+                            type="email" 
+                            name="email" 
+                            onChange={handleChange} 
+                            value={formData.email}
+                            required 
+                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors outline-none"
                             placeholder="nama@email.com"
                         />
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
                         <input 
-                            type="password" name="password" onChange={handleChange} required 
-                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
+                            type="password" 
+                            name="password" 
+                            onChange={handleChange} 
+                            value={formData.password}
+                            required 
+                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors outline-none"
                             placeholder="••••••••"
                         />
                     </div>
-                    <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-lg shadow transition-colors">
-                        Masuk
+                    <button 
+                        type="submit" 
+                        disabled={loading}
+                        className={`w-full ${loading ? 'bg-gray-400' : 'bg-emerald-600 hover:bg-emerald-700'} text-white font-bold py-3 px-4 rounded-lg shadow transition-colors`}
+                    >
+                        {loading ? 'Sedang Masuk...' : 'Masuk'}
                     </button>
                 </form>
 
-                <p className="mt-6 text-center text-gray-600">
-                    Belum punya akun?{' '}
-                    <Link to="/register" className="text-emerald-600 hover:text-emerald-700 font-bold">Daftar di sini</Link>
-                </p>
+                <div className="mt-8 pt-6 border-t border-gray-100 text-center">
+                    <p className="text-gray-600">
+                        Belum punya akun?{' '}
+                        <Link to="/register" className="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">
+                            Daftar di sini
+                        </Link>
+                    </p>
+                </div>
             </div>
         </div>
     );
