@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 
 export default function Register() {
     // SINKRONISASI: Menggunakan nama_lengkap sesuai kolom database
-    const [formData, setFormData] = useState({ nama_lengkap: '', email: '', password: '' });
+    const [formData, setFormData] = useState({ nama: '', email: '', password: '' });
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -36,7 +36,7 @@ export default function Register() {
                         <label className="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
                         <input 
                             type="text" 
-                            name="nama_lengkap" // SINKRONISASI: Harus nama_lengkap
+                            name="nama" 
                             onChange={handleChange} 
                             required 
                             className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
