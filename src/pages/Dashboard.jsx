@@ -19,7 +19,7 @@ export default function Dashboard() {
         tarawih: false, tadarus_surah: '', tadarus_ayat: ''
     });
 
-    // Cek tema saat load (Perbaikan agar sinkron)
+    // Cek tema saat load
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -31,9 +31,11 @@ export default function Dashboard() {
         }
     }, []);
 
-    // Fungsi Toggle yang sudah diperbaiki
+    // PERBAIKAN: Fungsi Toggle Anti-Nyangkut
     const toggleDarkMode = () => {
-        if (isDarkMode) {
+        const isCurrentlyDark = document.documentElement.classList.contains('dark');
+        
+        if (isCurrentlyDark) {
             document.documentElement.classList.remove('dark');
             localStorage.setItem('theme', 'light');
             setIsDarkMode(false);
@@ -112,8 +114,8 @@ export default function Dashboard() {
                 title: 'Masyaallah! 🌟',
                 text: res.data.message || 'Catatan Ibadah berhasil disimpan!',
                 confirmButtonColor: '#10b981',
-                background: isDarkMode ? '#1f2937' : '#fff',
-                color: isDarkMode ? '#fff' : '#000'
+                background: document.documentElement.classList.contains('dark') ? '#1f2937' : '#fff',
+                color: document.documentElement.classList.contains('dark') ? '#fff' : '#000'
             });
             
             fetchRekap(); 
@@ -151,7 +153,6 @@ export default function Dashboard() {
                     </div>
                     
                     <div className="flex flex-wrap justify-center md:justify-end gap-2 items-center">
-                        {/* Tombol Saklar Dark Mode */}
                         <button onClick={toggleDarkMode} className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition text-xl flex items-center justify-center w-10 h-10 mr-2">
                             {isDarkMode ? '🌞' : '🌙'}
                         </button>
@@ -165,7 +166,6 @@ export default function Dashboard() {
 
                 {/* Struktur 2 Kolom untuk Grafik dan Form */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Sisi Kiri: Form Input Lengkap */}
                     <div className="lg:col-span-2 space-y-6">
                         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-transparent dark:border-gray-700 transition-colors">
                             <div className="flex justify-between items-center mb-6">
@@ -179,13 +179,11 @@ export default function Dashboard() {
                             </div>
                             
                             <form onSubmit={handleSubmit} className="space-y-6">
-                                {/* 1. Puasa */}
                                 <label className="flex items-center space-x-3 p-3 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg cursor-pointer transition-colors">
                                     <input type="checkbox" name="puasa" checked={formData.puasa} onChange={handleChange} className="w-5 h-5 text-emerald-600 rounded focus:ring-emerald-500" />
                                     <span className="font-bold text-gray-700 dark:text-gray-200">Puasa Hari Ini</span>
                                 </label>
 
-                                {/* 2. Shalat Wajib */}
                                 <div>
                                     <h3 className="font-bold text-gray-700 dark:text-gray-300 border-b dark:border-gray-700 pb-2 mb-3">Shalat Wajib</h3>
                                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -198,7 +196,6 @@ export default function Dashboard() {
                                     </div>
                                 </div>
 
-                                {/* 3. Tarawih & Tadarus */}
                                 <div>
                                     <h3 className="font-bold text-gray-700 dark:text-gray-300 border-b dark:border-gray-700 pb-2 mb-3">Sunnah & Al-Quran</h3>
                                     <label className="flex items-center space-x-2 cursor-pointer mb-4 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg w-fit transition-colors">
@@ -224,17 +221,15 @@ export default function Dashboard() {
                         </div>
                     </div>
 
-                    {/* Sisi Kanan: Grafik & Statistik */}
                     <div className="space-y-6">
-                        {/* Kotak Grafik Progres */}
                         <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md border-t-4 border-blue-500 transition-colors">
                             <h3 className="font-bold text-gray-800 dark:text-white mb-4">📈 Progres 7 Hari Terakhir</h3>
                             <div className="h-48 w-full">
                                 {chartData.length > 0 ? (
                                     <ResponsiveContainer width="100%" height="100%">
                                         <LineChart data={chartData}>
-                                            <XAxis dataKey="tanggal" stroke={isDarkMode ? '#9ca3af' : '#6b7280'} fontSize={12} />
-                                            <Tooltip contentStyle={{ backgroundColor: isDarkMode ? '#1f2937' : '#fff', color: isDarkMode ? '#fff' : '#000', borderRadius: '8px', border: 'none' }} />
+                                            <XAxis dataKey="tanggal" stroke={document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280'} fontSize={12} />
+                                            <Tooltip contentStyle={{ backgroundColor: document.documentElement.classList.contains('dark') ? '#1f2937' : '#fff', color: document.documentElement.classList.contains('dark') ? '#fff' : '#000', borderRadius: '8px', border: 'none' }} />
                                             <Line type="monotone" dataKey="poin" stroke="#10b981" strokeWidth={4} dot={{ r: 4 }} />
                                         </LineChart>
                                     </ResponsiveContainer>
@@ -244,7 +239,6 @@ export default function Dashboard() {
                             </div>
                         </div>
 
-                        {/* Kartu Statistik Lengkap */}
                         <div className="grid grid-cols-2 gap-4">
                             <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow border-t-4 border-emerald-400 text-center transition-colors">
                                 <p className="text-gray-500 dark:text-gray-400 text-xs">Total Poin</p>
