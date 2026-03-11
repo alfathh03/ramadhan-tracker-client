@@ -10,8 +10,8 @@ export default function Dashboard() {
     const [tanggal, setTanggal] = useState(new Date().toISOString().split('T')[0]);
     const [stats, setStats] = useState({});
     
-    // State Dark Mode
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    // JURUS AMPUH: State tema langsung membaca dari memori browser
+    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
 
     const [formData, setFormData] = useState({
         puasa: false, shalat_subuh: false, shalat_dzuhur: false,
@@ -19,31 +19,20 @@ export default function Dashboard() {
         tarawih: false, tadarus_surah: '', tadarus_ayat: ''
     });
 
-    // Cek tema saat load
+    // JURUS AMPUH: Efek ini akan otomatis jalan setiap kali tombol diklik
     useEffect(() => {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            setIsDarkMode(true);
-            document.documentElement.classList.add('dark');
-        } else {
-            setIsDarkMode(false);
-            document.documentElement.classList.remove('dark');
-        }
-    }, []);
-
-    // PERBAIKAN: Fungsi Toggle Anti-Nyangkut
-    const toggleDarkMode = () => {
-        const isCurrentlyDark = document.documentElement.classList.contains('dark');
-        
-        if (isCurrentlyDark) {
-            document.documentElement.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
-            setIsDarkMode(false);
-        } else {
+        if (theme === 'dark') {
             document.documentElement.classList.add('dark');
             localStorage.setItem('theme', 'dark');
-            setIsDarkMode(true);
+        } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
         }
+    }, [theme]);
+
+    // Fungsi klik yang sangat simpel dan pasti jalan
+    const toggleTheme = () => {
+        setTheme(theme === 'light' ? 'dark' : 'light');
     };
 
     useEffect(() => {
@@ -114,8 +103,8 @@ export default function Dashboard() {
                 title: 'Masyaallah! 🌟',
                 text: res.data.message || 'Catatan Ibadah berhasil disimpan!',
                 confirmButtonColor: '#10b981',
-                background: document.documentElement.classList.contains('dark') ? '#1f2937' : '#fff',
-                color: document.documentElement.classList.contains('dark') ? '#fff' : '#000'
+                background: theme === 'dark' ? '#1f2937' : '#fff',
+                color: theme === 'dark' ? '#fff' : '#000'
             });
             
             fetchRekap(); 
@@ -153,8 +142,8 @@ export default function Dashboard() {
                     </div>
                     
                     <div className="flex flex-wrap justify-center md:justify-end gap-2 items-center">
-                        <button onClick={toggleDarkMode} className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition text-xl flex items-center justify-center w-10 h-10 mr-2">
-                            {isDarkMode ? '🌞' : '🌙'}
+                        <button onClick={toggleTheme} className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition text-xl flex items-center justify-center w-10 h-10 mr-2 shadow-sm">
+                            {theme === 'dark' ? '🌞' : '🌙'}
                         </button>
                         <button onClick={() => navigate('/jadwal')} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-bold shadow">⏰ Jadwal</button>
                         <button onClick={() => navigate('/doa')} className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold shadow">🤲 Doa</button>
@@ -164,7 +153,6 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-                {/* Struktur 2 Kolom untuk Grafik dan Form */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="lg:col-span-2 space-y-6">
                         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-transparent dark:border-gray-700 transition-colors">
@@ -228,8 +216,8 @@ export default function Dashboard() {
                                 {chartData.length > 0 ? (
                                     <ResponsiveContainer width="100%" height="100%">
                                         <LineChart data={chartData}>
-                                            <XAxis dataKey="tanggal" stroke={document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280'} fontSize={12} />
-                                            <Tooltip contentStyle={{ backgroundColor: document.documentElement.classList.contains('dark') ? '#1f2937' : '#fff', color: document.documentElement.classList.contains('dark') ? '#fff' : '#000', borderRadius: '8px', border: 'none' }} />
+                                            <XAxis dataKey="tanggal" stroke={theme === 'dark' ? '#9ca3af' : '#6b7280'} fontSize={12} />
+                                            <Tooltip contentStyle={{ backgroundColor: theme === 'dark' ? '#1f2937' : '#fff', color: theme === 'dark' ? '#fff' : '#000', borderRadius: '8px', border: 'none' }} />
                                             <Line type="monotone" dataKey="poin" stroke="#10b981" strokeWidth={4} dot={{ r: 4 }} />
                                         </LineChart>
                                     </ResponsiveContainer>
