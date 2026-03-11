@@ -138,6 +138,9 @@ export default function Dashboard() {
                         <button onClick={() => navigate('/leaderboard')} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-bold shadow transition">
                             🏆 Peringkat
                         </button>
+                        <button onClick={() => navigate('/rekap')} className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg font-bold shadow transition">
+                                 📖 Riwayat
+                        </button>
                         <button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-bold shadow transition">
                             Keluar
                         </button>

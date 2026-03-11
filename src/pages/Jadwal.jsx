@@ -50,13 +50,13 @@ export default function Jadwal() {
 
     return (
         <div className="min-h-screen bg-gray-100 p-4 md:p-8 font-sans flex justify-center">
-            <div className="max-w-5xl w-full space-y-6">
+            <div className="max-w-6xl w-full space-y-6">
                 <button onClick={() => navigate('/dashboard')} className="text-emerald-600 font-bold mb-4 hover:underline transition">
                     ← Kembali ke Dashboard
                 </button>
                 
                 <div className="text-center mb-6">
-                    <h1 className="text-3xl font-bold text-gray-800">Jadwal Imsakiyah ⏰</h1>
+                    <h1 className="text-3xl font-bold text-gray-800">Jadwal Imsakiyah & Shalat ⏰</h1>
                     <p className="text-gray-500 mt-2">Data Real-Time dari API Aladhan</p>
                 </div>
 
@@ -90,22 +90,29 @@ export default function Jadwal() {
                                     <th className="p-4 border-b font-bold">Hijriyah</th>
                                     <th className="p-4 border-b font-bold text-center text-red-600">Imsak</th>
                                     <th className="p-4 border-b font-bold text-center">Subuh</th>
+                                    <th className="p-4 border-b font-bold text-center">Dzuhur</th>
+                                    <th className="p-4 border-b font-bold text-center">Ashar</th>
                                     <th className="p-4 border-b font-bold text-center text-emerald-600">Maghrib (Buka)</th>
+                                    <th className="p-4 border-b font-bold text-center">Isya</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {loading ? (
                                     <tr>
-                                        <td colSpan="5" className="p-8 text-center text-gray-500 font-bold">Memuat jadwal...</td>
+                                        {/* PERBAIKAN: colSpan diubah menjadi 8 karena sekarang ada 8 kolom */}
+                                        <td colSpan="8" className="p-8 text-center text-gray-500 font-bold">Memuat jadwal...</td>
                                     </tr>
                                 ) : (
                                     jadwal.map((day, index) => (
-                                        <tr key={index} className="hover:bg-gray-50 transition border-b last:border-0">
+                                        <tr key={index} className="hover:bg-gray-50 transition border-b last:border-0 whitespace-nowrap">
                                             <td className="p-4 font-bold text-gray-700">{day.date.readable}</td>
                                             <td className="p-4 text-gray-600">{day.date.hijri.day} {day.date.hijri.month.en}</td>
                                             <td className="p-4 text-center font-bold text-red-500 bg-red-50/30">{cleanTime(day.timings.Imsak)}</td>
                                             <td className="p-4 text-center font-bold text-gray-700">{cleanTime(day.timings.Fajr)}</td>
+                                            <td className="p-4 text-center font-bold text-gray-700">{cleanTime(day.timings.Dhuhr)}</td>
+                                            <td className="p-4 text-center font-bold text-gray-700">{cleanTime(day.timings.Asr)}</td>
                                             <td className="p-4 text-center font-bold text-emerald-600 bg-emerald-50/50">{cleanTime(day.timings.Maghrib)}</td>
+                                            <td className="p-4 text-center font-bold text-gray-700">{cleanTime(day.timings.Isha)}</td>
                                         </tr>
                                     ))
                                 )}
