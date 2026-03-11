@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2'; // IMPORT SWEETALERT2
+import Swal from 'sweetalert2'; 
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -37,7 +37,6 @@ export default function Dashboard() {
         try {
             const res = await axios.get(`https://ramadhan-tracker-api-production.up.railway.app/api/tracker/${user.id}/${tanggal}`);
             if (res.data.data) {
-                // Jika sudah ada data di hari itu, masukkan ke form (Untuk fitur Edit)
                 setFormData({
                     puasa: res.data.data.puasa === 1,
                     shalat_subuh: res.data.data.shalat_subuh === 1,
@@ -50,7 +49,6 @@ export default function Dashboard() {
                     tadarus_ayat: res.data.data.tadarus_ayat || ''
                 });
             } else {
-                // Jika belum ada data, kosongkan form
                 setFormData({
                     puasa: false, shalat_subuh: false, shalat_dzuhur: false,
                     shalat_ashar: false, shalat_maghrib: false, shalat_isya: false,
@@ -82,28 +80,25 @@ export default function Dashboard() {
             const payload = { user_id: user.id, tanggal, ...formData };
             const res = await axios.post('https://ramadhan-tracker-api-production.up.railway.app/api/tracker', payload);
             
-            // POPUP BERHASIL SIMPAN
             Swal.fire({
                 icon: 'success',
                 title: 'Masyaallah! 🌟',
                 text: res.data.message || 'Catatan Ibadah berhasil disimpan!',
-                confirmButtonColor: '#10b981' // Warna hijau emerald Tailwind
+                confirmButtonColor: '#10b981' 
             });
             
-            fetchRekap(); // Update statistik setelah simpan
+            fetchRekap(); 
         } catch (error) {
-            // POPUP GAGAL SIMPAN
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Gagal menyimpan data ibadah! Cek koneksi Anda.',
-                confirmButtonColor: '#ef4444' // Warna merah Tailwind
+                confirmButtonColor: '#ef4444' 
             });
         }
     };
 
     const handleLogout = () => {
-        // Tambahan fitur: Konfirmasi sebelum logout
         Swal.fire({
             title: 'Yakin ingin keluar?',
             icon: 'warning',
@@ -132,9 +127,16 @@ export default function Dashboard() {
                         <h1 className="text-2xl font-bold text-gray-800 capitalize">Halo, {user.nama} 👋</h1>
                         <p className="text-gray-500">Selamat datang di Tracker Ramadhan</p>
                     </div>
-                    <div className="flex space-x-2">
-                        <button onClick={() => navigate('/leaderboard')} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-bold shadow transition flex items-center">
-                            🏆 Leaderboard
+                    {/* PERBAIKAN: Tombol Navigasi Lengkap (Jadwal, Doa, Leaderboard, Keluar) */}
+                    <div className="flex flex-wrap justify-center md:justify-end gap-2">
+                        <button onClick={() => navigate('/jadwal')} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-bold shadow transition">
+                            ⏰ Jadwal
+                        </button>
+                        <button onClick={() => navigate('/doa')} className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold shadow transition">
+                            🤲 Doa
+                        </button>
+                        <button onClick={() => navigate('/leaderboard')} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-bold shadow transition">
+                            🏆 Peringkat
                         </button>
                         <button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-bold shadow transition">
                             Keluar

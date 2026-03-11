@@ -1,50 +1,57 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function Doa() {
-    // Ini adalah Array (Daftar) yang berisi data doa-doa
+    const navigate = useNavigate();
+
     const daftarDoa = [
         {
-            id: 1,
             judul: "Niat Puasa Ramadhan",
             arab: "نَوَيْتُ صَوْمَ غَدٍ عَنْ أَدَاءِ فَرْضِ شَهْرِ رَمَضَانَ هَذِهِ السَّنَةِ لِلَّهِ تَعَالَى",
             latin: "Nawaitu shauma ghadin 'an adaa'i fardhi syahri Ramadhaana haadzihis sanati lillaahi ta'aalaa.",
-            arti: "Aku berniat puasa esok hari untuk menunaikan fardhu di bulan Ramadhan tahun ini, karena Allah Ta'ala."
+            arti: "Aku niat berpuasa esok hari untuk menunaikan kewajiban puasa bulan Ramadhan tahun ini, karena Allah Ta'ala."
         },
         {
-            id: 2,
-            judul: "Doa Berbuka Puasa",
-            arab: "اللَّهُمَّ لَكَ صُمْتُ وَبِكَ آمَنْتُ وَعَلَى رِزْقِكَ أَفْطَرْتُ",
-            latin: "Allahumma laka shumtu wa bika aamantu wa 'alaa rizqika afthartu.",
-            arti: "Ya Allah, untuk-Mu aku berpuasa, kepada-Mu aku beriman, dan dengan rezeki-Mu aku berbuka."
+            judul: "Doa Berbuka Puasa (Shahih)",
+            arab: "ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ، وَثَبَتَ الأَجْرُ إِنْ شَاءَ اللَّهُ",
+            latin: "Dzahabadz dzama'u wabtallatil 'uruuqu wa tsabatal ajru, insyaa Allah.",
+            arti: "Telah hilang rasa haus, telah basah urat-urat, dan telah pasti ganjaran, dengan kehendak Allah."
         },
         {
-            id: 3,
             judul: "Niat Shalat Tarawih (Sebagai Makmum)",
-            arab: "أُصَلِّي سُنَّةَ التَّرَاوِيحِ رَكْعَتَيْنِ مُسْتَقْبِلَ الْقِبْلَةِ مَأْمُومًا لِلَّهِ تَعَالَى",
+            arab: "اُصَلِّى سُنَّةَ التَّرَاوِيْحِ رَكْعَتَيْنِ مُسْتَقْبِلَ الْقِبْلَةِ مَأْمُوْمًا ِللهِ تَعَالَى",
             latin: "Ushalli sunnatat taraawiihi rak'ataini mustaqbilal qiblati ma'muuman lillaahi ta'aalaa.",
             arti: "Aku niat shalat sunnah tarawih dua rakaat menghadap kiblat sebagai makmum karena Allah Ta'ala."
+        },
+        {
+            judul: "Doa Malam Lailatul Qadar",
+            arab: "اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي",
+            latin: "Allahumma innaka 'afuwwun tuhibbul 'afwa fa'fu 'annii.",
+            arti: "Ya Allah, sesungguhnya Engkau Maha Pemaaf, Engkau menyukai pemaafan, maka maafkanlah aku."
         }
     ];
 
     return (
-        <div style={{ maxWidth: '600px', margin: '40px auto', fontFamily: 'sans-serif', textAlign: 'center' }}>
-            <h2>Kumpulan Doa Ramadhan 🤲</h2>
-            
-            <Link to="/dashboard" style={{ display: 'inline-block', marginBottom: '20px', textDecoration: 'none', color: '#007bff' }}>
-                ⬅ Kembali ke Tracker Ibadah
-            </Link>
+        <div className="min-h-screen bg-gray-100 p-4 md:p-8 font-sans">
+            <div className="max-w-3xl mx-auto space-y-6">
+                <button onClick={() => navigate('/dashboard')} className="text-emerald-600 font-bold mb-4 hover:underline transition">
+                    ← Kembali ke Dashboard
+                </button>
+                
+                <div className="text-center mb-8">
+                    <h1 className="text-3xl font-bold text-gray-800">Kumpulan Doa 🤲</h1>
+                    <p className="text-gray-500 mt-2">Doa-doa penting sehari-hari di bulan Ramadhan</p>
+                </div>
 
-            {/* Di sinilah keajaiban .map() terjadi! */}
-            {/* React akan mengulang pembuatan kotak (div) ini sebanyak jumlah doa yang ada di atas */}
-            <div>
-                {daftarDoa.map((doa) => (
-                    <div key={doa.id} style={{ background: '#f8f9fa', padding: '20px', borderRadius: '10px', marginBottom: '20px', textAlign: 'left', border: '1px solid #ddd' }}>
-                        <h3 style={{ margin: '0 0 10px 0', color: '#28a745' }}>{doa.judul}</h3>
-                        <p style={{ fontSize: '24px', textAlign: 'right', margin: '10px 0' }}><strong>{doa.arab}</strong></p>
-                        <p style={{ fontStyle: 'italic', color: '#555' }}>{doa.latin}</p>
-                        <p style={{ margin: '0' }}><strong>Artinya:</strong> {doa.arti}</p>
-                    </div>
-                ))}
+                <div className="space-y-4">
+                    {daftarDoa.map((doa, index) => (
+                        <div key={index} className="bg-white p-6 rounded-2xl shadow-md border-t-4 border-emerald-500 hover:shadow-lg transition">
+                            <h2 className="text-xl font-bold text-gray-800 mb-4">{doa.judul}</h2>
+                            <p className="text-right text-3xl font-arabic text-gray-900 mb-4 leading-loose" dir="rtl">{doa.arab}</p>
+                            <p className="text-emerald-600 font-medium italic mb-2">{doa.latin}</p>
+                            <p className="text-gray-600 text-sm">Artinya: "{doa.arti}"</p>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );
